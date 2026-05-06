@@ -39,6 +39,13 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _validate_count(count: int) -> None:
+    """Raise SystemExit if the run count is not a positive integer."""
+    if count < 1:
+        print("Error: --count must be a positive integer (>= 1)", file=sys.stderr)
+        sys.exit(1)
+
+
 def main(argv=None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -52,6 +59,8 @@ def main(argv=None) -> int:
     if args.validate:
         print(f"Valid cron expression: {args.expression}")
         return 0
+
+    _validate_count(args.count)
 
     now = datetime.now().replace(second=0, microsecond=0)
     runs = next_runs(cron, count=args.count, start=now)
