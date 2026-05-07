@@ -44,6 +44,18 @@ def test_format_relative_days():
     assert format_relative(dt, now=NOW) == "in 3d"
 
 
+def test_format_relative_exactly_one_minute():
+    """Boundary: exactly 60 seconds should display as minutes, not seconds."""
+    dt = NOW + timedelta(seconds=60)
+    assert format_relative(dt, now=NOW) == "in 1m"
+
+
+def test_format_relative_exactly_one_hour():
+    """Boundary: exactly 3600 seconds should display as hours, not minutes."""
+    dt = NOW + timedelta(seconds=3600)
+    assert format_relative(dt, now=NOW) == "in 1h"
+
+
 def test_format_schedule_table_contains_expression():
     runs = [NOW + timedelta(minutes=i * 5) for i in range(1, 4)]
     output = format_schedule_table("*/5 * * * *", runs, now=NOW, use_color=False)
